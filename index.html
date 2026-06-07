@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EngliTok - Belajar Inggris Scroll</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .feed-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .lesson-card {
+            height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            padding: 2rem 1.5rem 1.5rem;
+        }
+        
+        .progress-bar {
+            height: 3px;
+            background: linear-gradient(to right, #22c55e, #eab308);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-black text-white overflow-hidden">
+    <div class="max-w-md mx-auto h-screen relative border-x border-gray-800 shadow-2xl overflow-hidden" style="box-shadow: 0 0 30px rgba(0,0,0,0.5);">
+        <!-- Header -->
+        <div class="absolute top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-between px-4 py-3 border-b border-gray-800">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gradient-to-br from-green-400 to-yellow-400 rounded-xl flex items-center justify-center text-black font-bold text-xl">E</div>
+                <h1 class="font-bold text-2xl tracking-tighter">EngliTok</h1>
+            </div>
+            <div class="flex items-center gap-4 text-xl">
+                <i onclick="toggleSound()" class="fa-solid fa-volume-high cursor-pointer" id="sound-icon"></i>
+                <i onclick="showProfile()" class="fa-solid fa-user cursor-pointer"></i>
+            </div>
+        </div>
+
+        <!-- Feed -->
+        <div id="feed" class="feed-container pt-14">
+            <!-- Card 1: Vocabulary -->
+            <div class="lesson-card bg-zinc-900 flex flex-col">
+                <div class="flex-1 bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/1015/800/1200')">
+                    <div class="absolute top-4 right-4 bg-black/60 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                        <span class="text-green-400">★</span> Beginner
+                    </div>
+                    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 text-center">
+                        <div onclick="playAudio(0)" class="w-20 h-20 mx-auto bg-white/90 hover:bg-white rounded-2xl flex items-center justify-center text-4xl shadow-xl cursor-pointer active:scale-95 transition-transform">
+                            🔊
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="video-overlay">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <div class="text-4xl font-bold">Hello</div>
+                            <div class="text-emerald-400 text-sm">/həˈloʊ/</div>
+                        </div>
+                        <div onclick="markComplete(0)" class="px-5 py-2 bg-white text-black rounded-2xl font-semibold flex items-center gap-2 text-sm active:bg-gray-200">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Done</span>
+                        </div>
+                    </div>
+                    
+                    <p class="text-lg mb-4">"Hello! How are you today?"</p>
+                    
+                    <div class="grid grid-cols-2 gap-3 text-sm mb-6">
+                        <div onclick="answerQuiz(0, true)" class="bg-white/10 hover:bg-white/20 p-3 rounded-2xl cursor-pointer transition-colors border border-transparent hover:border-emerald-400">
+                            Greeting
+                        </div>
+                        <div onclick="answerQuiz(0, false)" class="bg-white/10 hover:bg-white/20 p-3 rounded-2xl cursor-pointer transition-colors">
+                            Farewell
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-2 text-xs">
+                        <div class="px-4 py-1 bg-white/10 rounded-full">Daily Life</div>
+                        <div class="px-4 py-1 bg-white/10 rounded-full">Level 1</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Phrase -->
+            <div class="lesson-card bg-zinc-900 flex flex-col">
+                <div class="flex-1 bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/201/800/1200')">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div onclick="playVideoDemo()" class="w-16 h-16 bg-red-500/90 hover:bg-red-600 rounded-full flex items-center justify-center text-3xl shadow-2xl cursor-pointer active:scale-95">
+                            ▶
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="video-overlay">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <div class="text-3xl font-semibold">"How's it going?"</div>
+                            <div class="text-amber-400">Casual greeting</div>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-4 text-zinc-300">"How's it going? — Not bad, thanks!"</p>
+                    
+                    <button onclick="recordPronunciation()" 
+                            class="w-full py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-3xl font-semibold flex items-center justify-center gap-2 mb-4 active:scale-95 transition-transform">
+                        <i class="fa-solid fa-microphone"></i>
+                        <span>Record & Practice</span>
+                    </button>
+                    
+                    <div class="text-xs opacity-70">Tap microphone to practice speaking</div>
+                </div>
+            </div>
+
+            <!-- Card 3: Grammar -->
+            <div class="lesson-card bg-zinc-900 flex flex-col">
+                <div class="flex-1 p-6 flex items-center justify-center bg-gradient-to-br from-purple-900 to-indigo-900">
+                    <div class="text-center">
+                        <div class="text-6xl mb-6">🏃</div>
+                        <div class="text-2xl font-bold mb-2">Present Continuous</div>
+                        <div class="text-xl text-purple-300">I am + verb-ing</div>
+                    </div>
+                </div>
+                
+                <div class="video-overlay">
+                    <p class="mb-4">"She <span class="line-through opacity-50">eat</span> <span class="font-bold text-lime-400">is eating</span> lunch right now."</p>
+                    
+                    <div class="flex gap-3">
+                        <button onclick="showFeedback(this)" 
+                                class="flex-1 py-3 bg-white/10 hover:bg-white/20 rounded-2xl">I am running</button>
+                        <button onclick="showFeedback(this)" 
+                                class="flex-1 py-3 bg-white/10 hover:bg-white/20 rounded-2xl">I run now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="absolute bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md border-t border-gray-800 py-2 px-6 flex justify-around text-xs z-50">
+            <div onclick="switchTab(0)" class="flex flex-col items-center text-emerald-400 cursor-pointer">
+                <i class="fa-solid fa-house text-xl"></i>
+                <span class="mt-1">Home</span>
+            </div>
+            <div onclick="switchTab(1)" class="flex flex-col items-center cursor-pointer">
+                <i class="fa-solid fa-book text-xl"></i>
+                <span class="mt-1">Lessons</span>
+            </div>
+            <div onclick="switchTab(2)" class="flex flex-col items-center cursor-pointer">
+                <i class="fa-solid fa-fire text-xl"></i>
+                <span class="mt-1">Streak</span>
+            </div>
+            <div onclick="switchTab(3)" class="flex flex-col items-center cursor-pointer">
+                <i class="fa-solid fa-chart-simple text-xl"></i>
+                <span class="mt-1">Progress</span>
+            </div>
+        </div>
+
+        <!-- Streak Banner -->
+        <div class="absolute top-14 left-1/2 -translate-x-1/2 bg-orange-500 text-black text-xs font-bold px-6 py-1 rounded-b-3xl flex items-center gap-2 shadow-lg z-40">
+            <i class="fa-solid fa-fire"></i>
+            <span id="streak-count">7</span> day streak 🔥
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-6 py-3 rounded-2xl flex items-center gap-3 shadow-2xl">
+        <i class="fa-solid fa-check-circle"></i>
+        <span id="toast-text">Great job!</span>
+    </div>
+
+    <script>
+        let currentSound = null;
+        
+        function playAudio(index) {
+            showToast("🔊 Playing pronunciation: 'Hello'", 1500);
+            
+            // Simulate audio
+            if (currentSound) currentSound.pause();
+            currentSound = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'); // placeholder
+            currentSound.play().catch(() => {});
+        }
+        
+        function playVideoDemo() {
+            showToast("🎥 Playing short context video...", 1200);
+        }
+        
+        function markComplete(index) {
+            showToast("✅ Card completed! +10 XP", 2000);
+        }
+        
+        function answerQuiz(index, correct) {
+            if (correct) {
+                showToast("🎉 Correct! Well done!", 1800);
+            } else {
+                showToast("❌ Not quite. Try again!", 1800);
+            }
+        }
+        
+        function recordPronunciation() {
+            showToast("🎤 Recording... (demo)", 2500);
+            setTimeout(() => {
+                showToast("✅ Pronunciation score: 92%", 2000);
+            }, 2600);
+        }
+        
+        function showFeedback(btn) {
+            btn.style.backgroundColor = '#22c55e';
+            btn.style.color = 'black';
+            setTimeout(() => {
+                showToast("✅ Excellent grammar usage!", 1500);
+            }, 300);
+        }
+        
+        function showToast(message, duration = 2000) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').textContent = message;
+            toast.classList.remove('hidden');
+            toast.style.transform = 'translate(-50%, 0)';
+            
+            setTimeout(() => {
+                toast.style.transform = 'translate(-50%, 100px)';
+                setTimeout(() => toast.classList.add('hidden'), 400);
+            }, duration);
+        }
+        
+        function toggleSound() {
+            const icon = document.getElementById('sound-icon');
+            if (icon.classList.contains('fa-volume-high')) {
+                icon.classList.remove('fa-volume-high');
+                icon.classList.add('fa-volume-xmark');
+            } else {
+                icon.classList.add('fa-volume-high');
+                icon.classList.remove('fa-volume-xmark');
+            }
+            showToast("Sound toggled");
+        }
+        
+        function showProfile() {
+            showToast("👤 Profile & Goals (demo)", 1500);
+        }
+        
+        function switchTab(n) {
+            showToast(["Home Feed", "All Lessons", "Your Streak", "Progress Dashboard"][n]);
+        }
+        
+        // Keyboard support (arrow keys for demo)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === ' ') {
+                const feed = document.getElementById('feed');
+                feed.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+            }
+        });
+        
+        // Initialize
+        window.onload = () => {
+            console.log('%cEngliTok Demo Ready 🚀\nSwipe or use arrow keys', 'color:#22c55e; font-size:14px');
+            
+            // Fake progress
+            setTimeout(() => {
+                showToast("Daily goal almost complete! 8/10 cards", 2200);
+            }, 3000);
+        };
+    </script>
+</body>
+</html>
